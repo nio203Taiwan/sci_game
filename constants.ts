@@ -1,12 +1,25 @@
-import { GameItem, BucketDef, ScenarioDef } from './types';
-import { Beaker, Settings2, Eye, Flame, Ruler, Timer, Wind, BoxSelect, CircleOff, ArrowUpDown } from 'lucide-react';
+import { BucketDef, ScenarioDef } from './types';
+import { 
+  Beaker, 
+  Settings2, 
+  Eye, 
+  Flame, 
+  Ruler, 
+  Timer, 
+  Wind, 
+  Container,
+  Target,
+  Thermometer,
+  Zap,
+  Layers
+} from 'lucide-react';
 
 export const BUCKETS: BucketDef[] = [
   {
     id: 'manipulated',
-    title: '主角',
-    subtitle: '操作變因',
-    description: '只有一個，我們要改變的',
+    title: '主角變因',
+    subtitle: '操作變因 (Independent)',
+    description: '只有一個，我們故意改變的部分。',
     color: 'text-orange-600',
     bgColor: 'bg-orange-50',
     borderColor: 'border-orange-200',
@@ -14,9 +27,9 @@ export const BUCKETS: BucketDef[] = [
   },
   {
     id: 'controlled',
-    title: '配角',
-    subtitle: '控制變因',
-    description: '全部要一樣，我們要固定的',
+    title: '配角變因',
+    subtitle: '控制變因 (Controlled)',
+    description: '必須保持一樣，確保實驗公平。',
     color: 'text-blue-600',
     bgColor: 'bg-blue-50',
     borderColor: 'border-blue-200',
@@ -24,9 +37,9 @@ export const BUCKETS: BucketDef[] = [
   },
   {
     id: 'responding',
-    title: '結果',
-    subtitle: '應變變因',
-    description: '我們要測量觀察的',
+    title: '結果變因',
+    subtitle: '應變變因 (Dependent)',
+    description: '最後產生的結果或測量的數值。',
     color: 'text-purple-600',
     bgColor: 'bg-purple-50',
     borderColor: 'border-purple-200',
@@ -39,19 +52,20 @@ export const ICONS_MAP: Record<string, any> = {
   'candle-thickness': Ruler,
   'ignition-time': Flame,
   'extinguish-time': Timer,
-  'location': BoxSelect,
-  'cover-method': Beaker,
-  'bottle-presence': CircleOff, // Icon for "有無罩瓶子"
-  'burn-status': Eye,           // Icon for "燃燒的情形"
-  'candle-length': ArrowUpDown, // Icon for "蠟燭的長短"
+  'location': Target,
+  'cover-method': Layers,
+  'bottle-presence': Container,
+  'candle-length': Ruler,
+  'air-temp': Thermometer,
+  'brightness': Zap,
 };
 
 export const SCENARIOS: ScenarioDef[] = [
   {
     id: 'scenario-1',
-    title: "空氣量是否影響燃燒時間",
-    description: "我們想透過實驗來找出「空氣的多寡」跟「蠟燭燃燒的時間」有什麼關係。",
-    question: "請將下列實驗卡片歸類到正確的變因籃子裡！",
+    title: "空氣量與燃燒時間",
+    description: "探索不同容量的廣口瓶中，蠟燭能燃燒多久？",
+    question: "要把「瓶子大小」放在哪裡呢？",
     items: [
       { id: 'bottle-size', label: '瓶子的大小', type: 'manipulated' },
       { id: 'candle-thickness', label: '蠟燭的粗細', type: 'controlled' },
@@ -63,13 +77,13 @@ export const SCENARIOS: ScenarioDef[] = [
   },
   {
     id: 'scenario-2',
-    title: "燃燒是否需要空氣",
-    description: "我們想知道如果沒有空氣，蠟燭還會不會燃燒？比較「有罩瓶子」與「不罩瓶子」。",
-    question: "在這個比較實驗中，哪些變因要改變？哪些要固定？",
+    title: "有無瓶罩的比較",
+    description: "如果不蓋瓶子 vs 蓋上瓶子，蠟燭的燃燒情形有何不同？",
+    question: "在這個對照實驗中，誰是我們唯一改變的變項？",
     items: [
       { id: 'bottle-presence', label: '有無罩瓶子', type: 'manipulated' },
       { id: 'candle-thickness', label: '蠟燭的粗細', type: 'controlled' },
-      { id: 'bottle-size', label: '瓶子的大小', type: 'controlled' }, // If using a bottle, use the same size
+      { id: 'bottle-size', label: '瓶子的大小', type: 'controlled' },
       { id: 'extinguish-time', label: '熄滅的秒數', type: 'responding' },
       { id: 'location', label: '實驗的地點', type: 'controlled' },
       { id: 'ignition-time', label: '點火的時間', type: 'controlled' },
@@ -77,9 +91,9 @@ export const SCENARIOS: ScenarioDef[] = [
   },
   {
     id: 'scenario-3',
-    title: "蠟燭粗細是否影響燃燒時間",
-    description: "粗的蠟燭和細的蠟燭，哪一個可以燒比較久？(假設瓶內空氣量相同)",
-    question: "請試著找出這個實驗的主角與配角！",
+    title: "蠟燭粗細的影響",
+    description: "在相同容量的瓶子中，粗蠟燭會燒得比細蠟燭久嗎？",
+    question: "找出這場實驗中的主角！",
     items: [
       { id: 'candle-thickness', label: '蠟燭的粗細', type: 'manipulated' },
       { id: 'bottle-size', label: '瓶子的大小', type: 'controlled' },
@@ -91,9 +105,9 @@ export const SCENARIOS: ScenarioDef[] = [
   },
   {
     id: 'scenario-4',
-    title: "蠟燭長短是否影響燃燒時間",
-    description: "長蠟燭跟短蠟燭，在同樣大小的瓶子裡燃燒，時間會一樣嗎？",
-    question: "請找出這個實驗的操作變因與控制變因！",
+    title: "蠟燭長度實驗",
+    description: "蠟燭的長短會影響氧氣消耗的速度進而影響燃燒時間嗎？",
+    question: "請找出需要保持一致的「配角」變因！",
     items: [
       { id: 'candle-length', label: '蠟燭的長短', type: 'manipulated' },
       { id: 'candle-thickness', label: '蠟燭的粗細', type: 'controlled' },

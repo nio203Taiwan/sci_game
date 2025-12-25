@@ -1,7 +1,6 @@
 import React from 'react';
 import { useDroppable } from '@dnd-kit/core';
 import { BucketDef, GameItem } from '../types';
-import { DraggableItem } from './DraggableItem';
 
 interface Props {
   bucket: BucketDef;
@@ -9,49 +8,53 @@ interface Props {
 }
 
 export const Bucket: React.FC<Props> = ({ bucket, items }) => {
-  const { setNodeRef, isOver } = useDroppable({
-    id: bucket.id,
-  });
+  const { setNodeRef, isOver } = useDroppable({ id: bucket.id });
 
   return (
     <div
       ref={setNodeRef}
       className={`
-        flex flex-col h-full min-h-[300px] rounded-2xl border-2 transition-all duration-200
+        flex flex-col h-full min-h-[380px] rounded-[2.5rem] border-4 transition-all duration-300 relative overflow-hidden
         ${bucket.bgColor}
-        ${isOver ? 'scale-[1.02] ring-4 ring-opacity-50 ring-indigo-300 border-indigo-500 shadow-xl' : bucket.borderColor}
+        ${isOver ? 'scale-[1.05] border-indigo-400 shadow-2xl ring-8 ring-indigo-500/10 z-10' : bucket.borderColor + ' shadow-sm'}
       `}
     >
-      {/* Header */}
-      <div className={`p-4 border-b ${bucket.borderColor} bg-white/50 rounded-t-2xl`}>
-        <div className="flex items-center gap-2 mb-1">
-          <bucket.icon className={`w-6 h-6 ${bucket.color}`} />
-          <h2 className={`text-xl font-bold ${bucket.color}`}>{bucket.title}</h2>
-        </div>
-        <div className="text-sm font-semibold text-slate-600 mb-1">{bucket.subtitle}</div>
-        <p className="text-xs text-slate-500 leading-tight">{bucket.description}</p>
+      {/* Decorative Label */}
+      <div className={`absolute top-4 right-6 opacity-10 pointer-events-none`}>
+        <bucket.icon size={80} />
       </div>
 
-      {/* Drop Area Content */}
-      <div className="flex-1 p-3 space-y-3 overflow-y-auto">
-        {items.length === 0 && !isOver && (
-          <div className="h-full flex items-center justify-center">
-            <div className="text-center text-slate-400/50">
-              <div className="text-4xl mb-2 font-bold opacity-20">?</div>
-              <span className="text-sm">拖曳卡片到這裡</span>
-            </div>
+      {/* Header */}
+      <div className={`p-8 border-b-2 bg-white/50 backdrop-blur-sm ${bucket.borderColor}`}>
+        <div className="flex items-center gap-4 mb-3">
+          <div className={`p-3 rounded-2xl bg-white shadow-sm ${bucket.color}`}>
+            <bucket.icon size={28} />
+          </div>
+          <h2 className={`text-2xl font-black ${bucket.color}`}>{bucket.title}</h2>
+        </div>
+        <p className="text-sm font-bold text-slate-500 leading-relaxed opacity-80">{bucket.description}</p>
+      </div>
+
+      {/* Drop Zone */}
+      <div className="flex-1 p-6 flex flex-col gap-4 relative z-10">
+        {items.length === 0 && (
+          <div className="flex-1 flex flex-col items-center justify-center border-4 border-dashed border-white/40 rounded-3xl opacity-30">
+            <div className="w-12 h-12 rounded-full border-4 border-current mb-3 flex items-center justify-center font-black text-xl">?</div>
+            <span className="text-sm font-black tracking-widest uppercase">等待歸位</span>
           </div>
         )}
         
         {items.map((item) => (
-          <div key={item.id} className="animate-pop">
-            {/* We disable dragging once it's in the correct bucket (optional choice, but makes game cleaner) */}
-             <div className="relative flex items-center gap-3 p-3 bg-white rounded-lg shadow-sm border border-green-200/50">
-                <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full flex items-center justify-center text-[10px] text-white shadow-sm">
-                  ✓
-                </div>
-                <span className="font-bold text-slate-700">{item.label}</span>
-             </div>
+          <div 
+            key={item.id} 
+            className="bg-white px-6 py-5 rounded-2xl shadow-md border-b-2 border-slate-100 flex items-center justify-between group animate-pop"
+          >
+            <span className="font-black text-slate-700">{item.label}</span>
+            <div className="bg-green-100 text-green-600 p-1.5 rounded-full shadow-inner animate-bounce">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="4" d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
           </div>
         ))}
       </div>
