@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useDraggable } from '@dnd-kit/core';
 import { GameItem } from '../types';
@@ -29,19 +30,22 @@ export const DraggableItem: React.FC<Props> = ({ item, isShaking, isOverlay }) =
       {...listeners}
       {...attributes}
       className={`
-        relative flex items-center gap-3 px-6 py-4 bg-white rounded-2xl border-b-4 select-none touch-none
+        relative flex items-center gap-4 px-7 py-5 bg-white rounded-3xl border-b-4 select-none touch-none
         transition-all duration-200 cursor-grab active:cursor-grabbing
         ${isDragging && !isOverlay ? 'opacity-0' : 'opacity-100'}
-        ${isShaking ? 'animate-shake border-red-500 ring-4 ring-red-100' : 'border-slate-200 shadow-lg hover:shadow-xl hover:-translate-y-1 hover:border-indigo-400'}
-        ${isOverlay ? 'shadow-2xl scale-110 border-indigo-500 rotate-2 ring-8 ring-indigo-500/10 cursor-grabbing' : ''}
+        ${isShaking ? 'animate-shake border-red-500 ring-8 ring-red-500/10' : 'border-slate-200 shadow-lg hover:shadow-2xl hover:-translate-y-1.5 hover:border-indigo-400'}
+        ${isOverlay ? 'shadow-3xl scale-110 border-indigo-500 rotate-3 ring-12 ring-indigo-500/10 cursor-grabbing' : ''}
       `}
     >
       {Icon && (
-        <div className={`p-2 rounded-xl ${isOverlay ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-500'}`}>
-          <Icon size={18} />
+        <div className={`p-2.5 rounded-2xl ${isOverlay ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-500'}`}>
+          <Icon size={22} />
         </div>
       )}
-      <span className="font-black text-slate-700 whitespace-nowrap">{item.label}</span>
+      <span className="font-black text-slate-700 text-lg whitespace-nowrap tracking-tight">{item.label}</span>
+      
+      {/* Decorative dot */}
+      <div className="absolute top-3 right-3 w-2 h-2 rounded-full bg-slate-200 group-hover:bg-indigo-300"></div>
     </div>
   );
 };
